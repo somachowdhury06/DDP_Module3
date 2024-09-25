@@ -1,0 +1,55 @@
+---
+title: "Developing Data Products Module 3 Course Project Presentation"
+author: "Soma Chowdhury"
+date: "2024-09-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## September 25, 2024
+
+```{r, eval=TRUE, echo=FALSE}
+
+library(leaflet)
+urlName = "https://www.coldstonecreamery.com/assets/img/products/kidscreations/Kids-bearybearyblue.jpg"
+
+mapIcon <- makeIcon(
+  iconUrl = urlName,
+  iconWidth = 31*200/230, iconHeight = 31,
+  iconAnchorX = 31*200/230/2, iconAnchorY = 16
+)
+
+
+
+latitudes <- c(40.782017969156556, 40.749328992929016, 40.72818877494632, 40.73220379446795, 40.661784658578576 ,40.671810615096554, 40.66020590843856, 40.667237423024595 )
+longitudes <- c(-73.52810454695481 , -73.61665737506897, -73.50648363420015, -73.63545548238736 , -73.54449068921448 , -73.47410952938999, -73.67104149829109, -73.72562981249642 )
+
+sites = c(
+  "<a href='https://orders.ordercoldstone.com/menu/cold-stone-jericho/'>Jericho</a>", 
+  "<a href='https://orders.ordercoldstone.com/menu/cold-stone-creamery-7/'>Carle Place</a>", 
+  "<a href='https://orders.ordercoldstone.com/menu/levittown/'>Levittown</a>",
+  "<a href='https://orders.ordercoldstone.com/menu/garden-city/'>Garden City</a>",
+  "<a href='https://orders.ordercoldstone.com/menu/cold-stone-creamery-merrick/'>Merrick</a>",
+  "<a href='https://orders.ordercoldstone.com/menu/massapequa-stone-inc/'>Massapequa</a>",
+  "<a href='https://orders.ordercoldstone.com/menu/lynbrook/'>Lynnbrook</a>",
+  "<a href='https://orders.ordercoldstone.com/menu/cold-stone-creamery-sunrise-highway/'>Sunrise Highway</a>")
+
+df <- data.frame(lat = latitudes,
+                 lng = longitudes)
+
+df %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions(), icon= mapIcon, popup = sites) %>%
+  addRectangles(lat1 = 40.55, lng1 = -73.73, 
+                lat2 = 40.89, lng2 = -73.47 )
+
+```
+
+
+
+
