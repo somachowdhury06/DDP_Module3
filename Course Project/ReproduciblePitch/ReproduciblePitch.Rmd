@@ -1,0 +1,75 @@
+---
+title: "Developing Data Products Course Project Reproducible Pitch"
+author: "Soma Chowdhury"
+date: "2024-10-01"
+output: ioslides_presentation
+runtime: shiny
+widescreen: true
+smaller: true
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(plotly)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Developing Data Products Course Presentation {.smaller}
+
+This presentation serves as a reproducible pitch for a Shiny application developed to meet the requirements of the Developing Data Products peer-graded course assignment. The application showcases the performance of three major stock exchanges over the period from September 2019 to September 2024.
+
+### Application and code links
+[ShinyApp](https://schowdhu06.shinyapps.io/ReproduciblePitch/) \
+[Github](https://github.com/somachowdhury06/DDP_Module3/tree/gh-pages/Course%20Project/ReproduciblePitch)
+
+## It's all about the data {.smaller}
+In the working directory is a csv file Trading Data.csv. It contains big 3 exchange data from Sep 2019 to Sep 2024.
+```{r }
+  csvdata <- read.csv("Trading data.csv",sep = ",", quote = '"', dec = ".", stringsAsFactors = FALSE)
+
+  csvdata$Date <- as.Date(csvdata$Date, "%m/%d/%Y")
+
+  head(csvdata,5)
+```
+
+## User Interaction {.smaller}
+The user will be provided with two dropdown menus: one to select a stock exchange and the other to choose a time period. The data for these dropdowns is sourced from the "Trading Data.csv" file. Based on the user's selections, a candlestick chart is generated and displayed.
+```{r eval=FALSE, echo=TRUE}
+inputPanel(
+    selectInput("Exchange", "Exchange:", choices = c("DOW","Nasdaq","S&P"),
+                selected = "DOW"),
+    selectInput("Period", "Period:", choices = c("Apr-20","Apr-21","Apr-22","May-20","May-21","May-22"),
+                selected = "Apr-20")
+)
+renderPlotly({
+    dt <- csvdata[csvdata$Symbol == input$Exchange & csvdata$Period == input$Period, ]
+    p <- dt %>% plot_ly(x= ~Date, type="candlestick",
+                        open= ~Open, close= ~Close, high= ~High, low= ~Low) %>%
+      layout(title=paste(input$Exchange,"Performance", sep = " "))
+})
+```
+## Demo {.smaller}
+```{r eval=TRUE}
+inputPanel(
+  
+    selectInput("Exchange", "Exchange:", choices = c("DOW","Nasdaq","S&P"),
+                selected = "DOW"),
+  
+
+    selectInput("Period", "Period:", choices = c("Apr-20","Apr-21","Apr-22","May-20","May-21","May-22"),
+                selected = "Apr-20")
+  
+
+)
+
+renderPlotly({
+    dt <- csvdata[csvdata$Symbol == input$Exchange & csvdata$Period == input$Period, ]
+
+    p <- dt %>% plot_ly(x= ~Date, type="candlestick",
+                        open= ~Open, close= ~Close, high= ~High, low= ~Low) %>%
+      layout(title=paste(input$Exchange,"Performance", sep = " "))
+})
+```
+
+Thank You
+
